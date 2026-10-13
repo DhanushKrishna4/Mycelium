@@ -1,0 +1,46 @@
+{
+  "status": "update_budget_exhausted",
+  "convergence_claim": false,
+  "failure": null,
+  "updates": 50,
+  "requested_updates": 50,
+  "regime": "regeneration",
+  "target": "ring",
+  "target_sha256": "7708b55420e024b322b3acd92a6880bd4126bc96f999c8f00138d3e22b6657f4",
+  "initial_weights_sha256": "f33645dedf47d48cc454fd3acf426feb500e650dc2139b27568e9ed0ec32cbb4",
+  "seed": 42,
+  "device": "mps",
+  "canvas": [
+    32,
+    32
+  ],
+  "channels": 16,
+  "batch_size": 4,
+  "pool_size": 128,
+  "unroll_range": [
+    48,
+    96
+  ],
+  "total_cell_steps": 14667776,
+  "training_seconds": 20.679054749998613,
+  "steady_update_seconds_median": 0.34363124999799766,
+  "steady_update_seconds_mean": 0.34012563611096186,
+  "last_objective_rgba_mse": 0.13156260550022125,
+  "best_validation_score": null,
+  "best_update": null,
+  "checkpoint": "runs/pilot-mps/checkpoints/step-000050.pt",
+  "model": null,
+  "environment": {
+    "python": "3.12.4",
+    "numpy": "2.0.2",
+    "torch": "2.6.0",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "device": "mps",
+    "threads": 2,
+    "mps_available": true
+  },
+  "peak_process_rss_mb": 442.5,
+  "mps_allocated_mb": 2.563232421875,
+  "mps_driver_mb": 243.09375
+}

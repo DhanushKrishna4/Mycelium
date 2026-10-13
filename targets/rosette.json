@@ -1,0 +1,22 @@
+{
+  "name": "rosette",
+  "version": 2,
+  "shape": [
+    32,
+    32,
+    4
+  ],
+  "dtype": "float32",
+  "layout": "HWC",
+  "alpha": "premultiplied",
+  "sha256": "5a66ae66eec37fbf1efe71cb60d4e9943fc6e0aa04a0b64bce18eecd3b045256",
+  "hash_encoding": "little-endian-float32-HWC",
+  "preprocessing": "4x supersampling; premultiplied area average",
+  "bounds_xyxy": [
+    6,
+    7,
+    27,
+    26
+  ],
+  "license": "MIT; original procedural artwork"
+}

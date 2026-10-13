@@ -1,0 +1,13 @@
+# Browser runtime and verification
+
+JavaScript owns controls, rendering, capped frame delivery, and a serial transport; Python owns all simulation state, transitions, interventions, model validation, metrics, paired branches, and experiment serialization. The persistent module worker imports exactly the native NumPy source from a deterministic ZIP. Only NumPy is loaded from the pinned Pyodide 0.27.7 package distribution. Required assets are self-hosted by the build.
+
+Simulation requests contain 1–8 steps and at most one request is outstanding. The bounded pending event queue holds 128 requests; older generation responses are discarded after resets and model switches. Playback adaptively changes chunk work without changing the transition or consuming extra masks. Every branch draws one PCG64 float32 random mask per transition; comparison branches begin with identical RNG state. Paired experiments clone the entire state, lesions and RNG; only B receives interventions. Hidden maps are sent only when requested; paired differences have fixed shared scales.
+
+The default canvas 32×32 is validated. Larger grids are supported only by bounded native core experiments, not exposed as a validated website mode. Hidden channel indices 4–15 use a fixed ±2 display scale; zero is dark. Alpha 0–1 and update RMS 0–0.05 are display scales, not clipping of internal values. Transitions stop on nonfinite or excessive values.
+
+Controls include real pointer capture with CSS-coordinate mapping independent of devicePixelRatio, keyboard buttons and preset damage, local model/experiment imports, JSON/CSV/PNG exports, and worker recreation. An error loading any runtime asset produces a retry control. Page visibility has an explicit pause handler. PyProxy function handles are retained only when required and temporary ones destroyed.
+
+`npm run check:web` checks serial requests, stale generations, timeout termination, and coordinate mapping. Native tests verify simulation/replay/pool/math independently. Advanced “Check numerical parity” runs the frozen PyTorch fixture inside actual browser NumPy; “Measure runtime” measures 128 steps on an independent clone, including yields but excluding rendering/startup. These diagnostics export JSON and do not alter the visible experiment.
+
+See `reports/browser-diagnostics.json` and `reports/browser-verification.json` for the actual browser checks, timings, and any unverified cases. Browser automation is evidence of this tested Chromium environment, not a Safari/Firefox/touch-device claim. GitHub Actions runs native/unit/static checks; browser evidence is recorded separately and is not fabricated by CI.

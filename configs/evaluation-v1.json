@@ -1,0 +1,26 @@
+{
+  "schema": "mycelium.evaluation.v1",
+  "frozen_before_training": true,
+  "grid_size": 32,
+  "alpha_threshold": 0.1,
+  "growth_horizon": 256,
+  "growth_seeds": [90101,90102,90103,90104,90105,90106,90107,90108],
+  "persistence_horizon": 1024,
+  "persistence_seeds": [90201,90202,90203,90204],
+  "repair_seeds": [90301,90302,90303],
+  "damage_step": 256,
+  "repair_horizon": 256,
+  "measurement_interval": 16,
+  "sustained_samples": 3,
+  "quality": {"maximum_relative_error": 0.35, "minimum_iou": 0.65},
+  "minimum_removed_fraction": 0.08,
+  "moderate_maximum_removed_fraction": 0.5,
+  "damage_families": [
+    {"name":"rectangle","rect":[16,9,23,18]},
+    {"name":"slit","rect":[14,5,17,27]},
+    {"name":"edge_cut","rect":[0,0,12,32]}
+  ],
+  "stress_seed": 90401,
+  "stress": ["total_erasure","large_cut","probability_0.25","probability_0.9","persistent_lesion","repeated_damage"],
+  "notes": "All targets are known training targets. One training initialization per regime is a case study, not replicated training. Thresholds fixed before training. Moderate or severe classification uses actual occupied cells removed."
+}

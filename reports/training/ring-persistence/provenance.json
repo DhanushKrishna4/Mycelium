@@ -1,0 +1,29 @@
+{
+  "source_run": "runs/ring-persistence",
+  "records": 2500,
+  "logs_complete": true,
+  "note": "All recorded updates and fields retained; JSON whitespace compacted.",
+  "files": {
+    "summary.json": {
+      "sha256": "08add295964a3bd4f7a8d6b915410771b2077b3367413ef62c781a73cdbc7021",
+      "bytes": 1216
+    },
+    "config.json": {
+      "sha256": "686f3522681e5a0ed623bf7ad140833be1d21ebb997c0484dffd32abd37edb87",
+      "bytes": 489
+    },
+    "environment.json": {
+      "sha256": "91b9f2d0887bda2eed80fc618b537f7b683a19900e5501416c657e618678c145",
+      "bytes": 192
+    },
+    "target.npy": {
+      "sha256": "b63f6adb25fc96e072c201033b5d07b1eb951acc29988c1f3df4b67d90dca0ef",
+      "bytes": 16512
+    },
+    "training.jsonl": {
+      "sha256": "89459809a71eef5c8f3a1a5ce93e086e9d34972b81a7172a53f6513694d4c8a2",
+      "bytes": 1129275
+    }
+  },
+  "source_training_log_sha256": "09a8909bcc277cd8b6a4ca1c46fa23317825adf375f572436650373ab68748d9"
+}

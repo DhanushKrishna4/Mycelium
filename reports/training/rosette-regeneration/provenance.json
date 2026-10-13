@@ -1,0 +1,29 @@
+{
+  "source_run": "runs/rosette-regeneration",
+  "records": 2500,
+  "logs_complete": true,
+  "note": "All recorded updates and fields retained; JSON whitespace compacted.",
+  "files": {
+    "summary.json": {
+      "sha256": "d8293128adbb87ea17dd0ec80e8bc5d014f738b88a40d5a106d1ee202d9d1529",
+      "bytes": 1230
+    },
+    "config.json": {
+      "sha256": "e740c1faa24c7a097093024e6cd77d2c12684806a526f72fe7adb63a3b30a4f5",
+      "bytes": 497
+    },
+    "environment.json": {
+      "sha256": "91b9f2d0887bda2eed80fc618b537f7b683a19900e5501416c657e618678c145",
+      "bytes": 192
+    },
+    "target.npy": {
+      "sha256": "e4f428b2bc21fed4851f99b7c52661edacca12f222e99936484ac46c4b25cfaa",
+      "bytes": 16512
+    },
+    "training.jsonl": {
+      "sha256": "02133bbfc5cade1bad8476cfbb1f4cb9761698df21ff6b4a99814e40251b98a5",
+      "bytes": 1819437
+    }
+  },
+  "source_training_log_sha256": "7e5a764f1912965e2d40a6b26600504f6939b0a25060ff1411b4f3f5a7bb2031"
+}

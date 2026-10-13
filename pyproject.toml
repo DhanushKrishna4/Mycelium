@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools==75.8.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mycelium-nca"
+version = "0.1.0"
+description = "A local neural cellular automata laboratory"
+requires-python = ">=3.12,<3.13"
+dependencies = ["numpy==2.0.2"]
+license = {file = "LICENSE"}
+
+[project.optional-dependencies]
+train = ["torch==2.6.0", "Pillow==11.1.0", "psutil==7.0.0"]
+test = ["pytest==8.3.5"]
+
+[project.scripts]
+mycelium = "mycelium_nca.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,0 +1,22 @@
+{
+  "name": "ring",
+  "version": 2,
+  "shape": [
+    32,
+    32,
+    4
+  ],
+  "dtype": "float32",
+  "layout": "HWC",
+  "alpha": "premultiplied",
+  "sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+  "hash_encoding": "little-endian-float32-HWC",
+  "preprocessing": "4x supersampling; premultiplied area average",
+  "bounds_xyxy": [
+    6,
+    6,
+    27,
+    27
+  ],
+  "license": "MIT; original procedural artwork"
+}

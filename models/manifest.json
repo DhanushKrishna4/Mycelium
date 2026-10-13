@@ -1,0 +1,182 @@
+{
+  "schema": "mycelium.gallery.v1",
+  "defaultTarget": "ring",
+  "anchorTarget": "ring",
+  "complete_model_set": true,
+  "missing_models": [],
+  "quality_claim": "Artifact presence is not a quality gate. Read the frozen evaluation reports.",
+  "models": [
+    {
+      "id": "ring-regeneration",
+      "name": "Ring \u00b7 Regeneration",
+      "target": "ring",
+      "regime": "regeneration",
+      "file": "ring-regeneration.json",
+      "bytes": 87130,
+      "model_sha256": "34827031290ddb1adfb8f30fce1732f7a7b7f45255376648339675baf96a1a63",
+      "weights_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+      "target_sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+      "checkpoint_update": 2400,
+      "native_checkpoint_sha256": "3b914cb67625374ece55e85b8602ba5854b3aa077da7c62d99b94603d89f6a19",
+      "training_seed": 42,
+      "selection": "minimum frozen validation-v1 balanced error; no final-evaluation selection",
+      "training_summary": "reports/training/ring-regeneration/summary.json",
+      "training_log": "reports/training/ring-regeneration/training.jsonl",
+      "provenance": "reports/training/ring-regeneration/provenance.json",
+      "training_log_sha256": "a98bc71690a7a94eb17a687166b0044f79b9e73bf5d4e24ec2e426715b5fe1ed"
+    },
+    {
+      "id": "ring-growth",
+      "name": "Ring \u00b7 Growth",
+      "target": "ring",
+      "regime": "growth",
+      "file": "ring-growth.json",
+      "bytes": 87233,
+      "model_sha256": "58161198e48304dee006802148ec9eedfbea632c192bd6e5da1aac1159257766",
+      "weights_hash": "1c7150e54b2f32dff7b094b861c881c44f6432468eb2ae44200263338300e612",
+      "target_sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+      "checkpoint_update": 2400,
+      "native_checkpoint_sha256": "f049ba147aa4af336bf0c7fc545d0409b3cc8934b52c78da49d34bf64e2afcd5",
+      "training_seed": 42,
+      "selection": "minimum frozen validation-v1 balanced error; no final-evaluation selection",
+      "training_summary": "reports/training/ring-growth/summary.json",
+      "training_log": "reports/training/ring-growth/training.jsonl",
+      "provenance": "reports/training/ring-growth/provenance.json",
+      "training_log_sha256": "42b8caaa4982b5a2a4d366cbea501f69158e920b268494558e758257409862ba"
+    },
+    {
+      "id": "ring-persistence",
+      "name": "Ring \u00b7 Persistence",
+      "target": "ring",
+      "regime": "persistence",
+      "file": "ring-persistence.json",
+      "bytes": 87216,
+      "model_sha256": "7cb7fe85650d8c85c1ad475b08b1c72c2afd7cad0fc2198537a29f8968d36f98",
+      "weights_hash": "b47471757d5a64e17372a6969fc1aa4010dd4a47cc8af2336d632601a5e50d71",
+      "target_sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+      "checkpoint_update": 2200,
+      "native_checkpoint_sha256": "861d2d637b6da0dab51737b7db5a1d8b70b32e4d88506a5d6408112e17cfc0f3",
+      "training_seed": 42,
+      "selection": "minimum frozen validation-v1 balanced error; no final-evaluation selection",
+      "training_summary": "reports/training/ring-persistence/summary.json",
+      "training_log": "reports/training/ring-persistence/training.jsonl",
+      "provenance": "reports/training/ring-persistence/provenance.json",
+      "training_log_sha256": "89459809a71eef5c8f3a1a5ce93e086e9d34972b81a7172a53f6513694d4c8a2"
+    },
+    {
+      "id": "leaf-regeneration",
+      "name": "Leaf \u00b7 Regeneration",
+      "target": "leaf",
+      "regime": "regeneration",
+      "file": "leaf-regeneration.json",
+      "bytes": 87345,
+      "model_sha256": "d52e7ef6b65224280ac91e81a4b4a481b1085edf88761676f5a69653fe759b77",
+      "weights_hash": "48e727940969831aa6e57196119f0bdbc41567de367b7a5096be8164a953e399",
+      "target_sha256": "ce845d1699d15285512310f4e900c4842932930364ff7a1f13a8efc59332cc1f",
+      "checkpoint_update": 2400,
+      "native_checkpoint_sha256": "7cbea02e4ff97fa0f59650915bf192697795133ea0a9005116feb25ed6ec62ae",
+      "training_seed": 42,
+      "selection": "minimum frozen validation-v1 balanced error; no final-evaluation selection",
+      "training_summary": "reports/training/leaf-regeneration/summary.json",
+      "training_log": "reports/training/leaf-regeneration/training.jsonl",
+      "provenance": "reports/training/leaf-regeneration/provenance.json",
+      "training_log_sha256": "321887492f9a687298cac9387674c9e310b813f3c0811123fde4338b070c641c"
+    },
+    {
+      "id": "rosette-regeneration",
+      "name": "Rosette \u00b7 Regeneration",
+      "target": "rosette",
+      "regime": "regeneration",
+      "file": "rosette-regeneration.json",
+      "bytes": 87335,
+      "model_sha256": "5a23ee2226a8fa587830ab6e6b8e1e6f12e269ed9c846f5dec6cb99ab9cd7086",
+      "weights_hash": "103902abee3642feba988acc3ecee5a4e86307871ce505058363f3f1b0245ae1",
+      "target_sha256": "5a66ae66eec37fbf1efe71cb60d4e9943fc6e0aa04a0b64bce18eecd3b045256",
+      "checkpoint_update": 2400,
+      "native_checkpoint_sha256": "a1d8970ae486a734301d025b366a2fd5e451500cbf09cda6e56708929fcb0dc2",
+      "training_seed": 42,
+      "selection": "minimum frozen validation-v1 balanced error; no final-evaluation selection",
+      "training_summary": "reports/training/rosette-regeneration/summary.json",
+      "training_log": "reports/training/rosette-regeneration/training.jsonl",
+      "provenance": "reports/training/rosette-regeneration/provenance.json",
+      "training_log_sha256": "02133bbfc5cade1bad8476cfbb1f4cb9761698df21ff6b4a99814e40251b98a5"
+    }
+  ],
+  "targets": [
+    {
+      "name": "leaf",
+      "version": 2,
+      "shape": [
+        32,
+        32,
+        4
+      ],
+      "dtype": "float32",
+      "layout": "HWC",
+      "alpha": "premultiplied",
+      "sha256": "ce845d1699d15285512310f4e900c4842932930364ff7a1f13a8efc59332cc1f",
+      "hash_encoding": "little-endian-float32-HWC",
+      "preprocessing": "4x supersampling; premultiplied area average",
+      "bounds_xyxy": [
+        7,
+        7,
+        26,
+        26
+      ],
+      "license": "MIT; original procedural artwork",
+      "id": "leaf",
+      "json": "targets/leaf.json",
+      "preview": "targets/leaf.png"
+    },
+    {
+      "name": "ring",
+      "version": 2,
+      "shape": [
+        32,
+        32,
+        4
+      ],
+      "dtype": "float32",
+      "layout": "HWC",
+      "alpha": "premultiplied",
+      "sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+      "hash_encoding": "little-endian-float32-HWC",
+      "preprocessing": "4x supersampling; premultiplied area average",
+      "bounds_xyxy": [
+        6,
+        6,
+        27,
+        27
+      ],
+      "license": "MIT; original procedural artwork",
+      "id": "ring",
+      "json": "targets/ring.json",
+      "preview": "targets/ring.png"
+    },
+    {
+      "name": "rosette",
+      "version": 2,
+      "shape": [
+        32,
+        32,
+        4
+      ],
+      "dtype": "float32",
+      "layout": "HWC",
+      "alpha": "premultiplied",
+      "sha256": "5a66ae66eec37fbf1efe71cb60d4e9943fc6e0aa04a0b64bce18eecd3b045256",
+      "hash_encoding": "little-endian-float32-HWC",
+      "preprocessing": "4x supersampling; premultiplied area average",
+      "bounds_xyxy": [
+        6,
+        7,
+        27,
+        26
+      ],
+      "license": "MIT; original procedural artwork",
+      "id": "rosette",
+      "json": "targets/rosette.json",
+      "preview": "targets/rosette.png"
+    }
+  ]
+}

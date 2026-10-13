@@ -1,0 +1,29 @@
+{
+  "source_run": "runs/leaf-regeneration",
+  "records": 2500,
+  "logs_complete": true,
+  "note": "All recorded updates and fields retained; JSON whitespace compacted.",
+  "files": {
+    "summary.json": {
+      "sha256": "851e9deb59d2baf2ac3dc3cf7c486cf8fc995b7645bc9eed5526e24ba93a0fac",
+      "bytes": 1219
+    },
+    "config.json": {
+      "sha256": "ba172e9330793b869d841d87652111ff3d6d0d246af324c1e9ad9347f94827dc",
+      "bytes": 491
+    },
+    "environment.json": {
+      "sha256": "91b9f2d0887bda2eed80fc618b537f7b683a19900e5501416c657e618678c145",
+      "bytes": 192
+    },
+    "target.npy": {
+      "sha256": "0f20e0fb9e63ef7e6bb2686f555954b53d8a3da045980651b5bd90b0194578a6",
+      "bytes": 16512
+    },
+    "training.jsonl": {
+      "sha256": "321887492f9a687298cac9387674c9e310b813f3c0811123fde4338b070c641c",
+      "bytes": 1818048
+    }
+  },
+  "source_training_log_sha256": "5bd14fc1d9980f20567dff752a79bffef04548da5ddd1f1799483c71dab1184b"
+}

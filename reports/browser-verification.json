@@ -1,0 +1,158 @@
+{
+  "schema": "mycelium.browser-verification.v1",
+  "verification_dates": [
+    "2026-10-10",
+    "2026-10-11"
+  ],
+  "url": "http://127.0.0.1:8732/Mycelium/",
+  "browser": "Codex in-app browser, Chromium 155",
+  "execution": "Live static build; actual Python/NumPy in a persistent Pyodide worker; UI interactions via browser automation.",
+  "checks": [
+    {
+      "check": "cold_loading",
+      "status": "passed",
+      "evidence": "actual self-hosted Pyodide and NumPy loaded at /Mycelium/; live learned ring rendered."
+    },
+    {
+      "check": "pause_step_restart",
+      "status": "passed",
+      "evidence": "pause freezes evolution; step advanced 421 to 422; repeated restart and final paused Ready label verified."
+    },
+    {
+      "check": "model_switching",
+      "status": "passed",
+      "evidence": "ring, leaf and rosette selected during live operation; imported ring model reset to step zero and showed its checkpoint/hash."
+    },
+    {
+      "check": "extinction_and_seed",
+      "status": "passed",
+      "evidence": "full erasure remained empty after a step, with zero occupied cells, empty-relative error 1 and IoU 0; explicit seed restored a live state."
+    },
+    {
+      "check": "training_comparison",
+      "status": "passed",
+      "evidence": "synchronized branch UI and interventions; growth-only numerical failure at step 1396 stopped both branches and preserved the last valid state."
+    },
+    {
+      "check": "paired_perturbation",
+      "status": "passed",
+      "evidence": "clone began with zero divergence; damage to B and a subsequent step produced visible MSE 0.00030 and hidden MSE 0.00145, leaving A alive."
+    },
+    {
+      "check": "hidden_inspection",
+      "status": "passed",
+      "evidence": "channel 4 fixed shared scale +/-2, visible and hidden difference maps, and divergence curves."
+    },
+    {
+      "check": "results",
+      "status": "passed",
+      "evidence": "recorded growth/persistence/repair table includes all five models and failed gates with raw report links."
+    },
+    {
+      "check": "experiment_roundtrip",
+      "status": "passed",
+      "evidence": "exported leaf experiment at step 326; advanced to 327; imported export restored step 326, visible metrics, and paused state."
+    },
+    {
+      "check": "model_roundtrip",
+      "status": "passed",
+      "evidence": "actual downloaded ring model retained identical validated weights hash; imported supported model selected at step zero."
+    },
+    {
+      "check": "exports",
+      "status": "passed",
+      "evidence": "PNG decoded as 32x32, CSV parsed 465 records, experiment and model JSON parsed and validated."
+    },
+    {
+      "check": "canvas_lesion",
+      "status": "passed",
+      "evidence": "pointer click recorded integer cell (16,15), radius 4, at step 354. All 49 lesion cells had all 16 channels zero after step 355."
+    },
+    {
+      "check": "lesion_clear_and_noise",
+      "status": "passed",
+      "evidence": "clearing lesions left zero constrained cells; noise at (16,16), radius 4, seed 123, amplitude 0.1 changed 49 cells, max absolute change 0.09968626499176025."
+    },
+    {
+      "check": "worker_recreation",
+      "status": "passed",
+      "evidence": "live Recreate worker discarded the old run and loaded a new evolving simulation."
+    },
+    {
+      "check": "asset_failure_and_retry",
+      "status": "passed",
+      "evidence": "temporarily renamed the local runtime ZIP, recreated worker and observed a specific missing-package error and Reload runtime control; restored asset, retried, and confirmed a working simulation."
+    },
+    {
+      "check": "responsive_layout",
+      "status": "passed",
+      "evidence": "visually at 390x844 and 1440x1080 viewport overrides; narrow layout prioritizes the canvas. Overrides reset after verification."
+    },
+    {
+      "check": "numerical_parity",
+      "status": "passed",
+      "evidence": "in actual Pyodide NumPy 2.0.2 against frozen PyTorch CPU references; details in browser-diagnostics.json."
+    }
+  ],
+  "unverified": [
+    {
+      "check": "actual_background_tab_pause",
+      "reason": "Visibility-change pause handler exists, but switching in-app browser tabs did not reliably put the page into document.hidden. Real backgrounding remains unverified."
+    },
+    {
+      "check": "Safari_and_Firefox",
+      "reason": "Only the available Chromium 155 in-app browser was tested."
+    },
+    {
+      "check": "physical_touch_and_high_DPI_zoom",
+      "reason": "Real canvas clicks and responsive layouts tested; coordinate mapping including zoom/outside bounds unit-tested. Physical touch, actual zoom, and outside-canvas dragging were not exercised end-to-end."
+    },
+    {
+      "check": "live_unresponsive_worker_timeout",
+      "reason": "Timeout termination and queued rejection passed the transport test; deliberately hanging the actual Python worker was not exercised."
+    },
+    {
+      "check": "reduced_motion_and_screen_reader",
+      "reason": "Reduced-motion startup and focus/labels implemented; preference emulation and screen-reader use not exercised."
+    },
+    {
+      "check": "hosted_GitHub_Pages",
+      "reason": "Not exercised during the original local verification on 2026-10-10/11. See docs/deployment.md for subsequent publication status and hosted verification."
+    }
+  ],
+  "automated_tests": {
+    "native": {
+      "command": ".venv/bin/python -m pytest -q",
+      "passed": 41,
+      "seconds": 2.2
+    },
+    "javascript": {
+      "command": "npm run check:web",
+      "passed": 3
+    }
+  },
+  "parity_and_benchmark": "browser-diagnostics.json",
+  "screenshots": [
+    "browser-desktop.png",
+    "browser-mobile.png"
+  ],
+  "export_verification": {
+    "png_size": [
+      32,
+      32
+    ],
+    "csv_rows": 465,
+    "model_weights_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+    "experiment_schema": "mycelium.laboratory.v1",
+    "experiment_restored_step": 326
+  },
+  "source_hashes": {
+    "web/app.js": "ab3aa5da56743e2b4f43bc82bf11c595a7193fde1d0f7e51e873cb35a9f24429",
+    "web/worker.js": "6b8316441228f3fdf3bf33f1bfc83df5abe58c23d66c9e1f002b4049cfd8000b",
+    "web/runtime-client.js": "2acef7936c7c8ff3591ce4878c8963905b3cdff660182605f4a031f16353eb39",
+    "src/mycelium_nca/browser.py": "1430a839c5045d2d2b020e64a0ebb19e747bf108d111009f98abaf6e8d20753b",
+    "src/mycelium_nca/replay.py": "900af880ef7d48479b34d81392fea38001d9cbbbd948b89a2a6a65a031f78f1a",
+    "web/index.html": "25ddc673569ac404a5aeaaed5552fa4bf4c6b9f390844ce9d8166033af4ea3dd",
+    "web/style.css": "0760870cfe06aab728d8661e44528a9999ce7efe70331de6e0b3dabd187acdcc"
+  }
+}

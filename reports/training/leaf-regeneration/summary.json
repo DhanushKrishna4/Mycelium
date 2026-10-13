@@ -1,0 +1,44 @@
+{
+  "status": "update_budget_exhausted",
+  "convergence_claim": false,
+  "failure": null,
+  "updates": 2500,
+  "requested_updates": 2500,
+  "regime": "regeneration",
+  "target": "leaf",
+  "target_sha256": "ce845d1699d15285512310f4e900c4842932930364ff7a1f13a8efc59332cc1f",
+  "initial_weights_sha256": "f33645dedf47d48cc454fd3acf426feb500e650dc2139b27568e9ed0ec32cbb4",
+  "seed": 42,
+  "device": "cpu",
+  "canvas": [
+    32,
+    32
+  ],
+  "channels": 16,
+  "batch_size": 4,
+  "pool_size": 128,
+  "unroll_range": [
+    48,
+    64
+  ],
+  "total_cell_steps": 572559360,
+  "training_seconds": 376.1827303750033,
+  "steady_update_seconds_median": 0.1443158750043949,
+  "steady_update_seconds_mean": 0.14630213796281497,
+  "last_objective_rgba_mse": 0.000594861339777708,
+  "best_validation_score": 0.0008884858301219841,
+  "best_update": 2400,
+  "checkpoint": "runs/leaf-regeneration/checkpoints/step-002500.pt",
+  "model": "runs/leaf-regeneration/model.json",
+  "environment": {
+    "python": "3.12.4",
+    "numpy": "2.0.2",
+    "torch": "2.6.0",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "device": "cpu",
+    "threads": 2,
+    "mps_available": false
+  },
+  "peak_process_rss_mb": 602.0625
+}

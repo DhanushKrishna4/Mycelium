@@ -1,0 +1,21 @@
+{
+  "target": "ring",
+  "regime": "regeneration",
+  "seed": 42,
+  "updates": 2500,
+  "batch_size": 4,
+  "pool_size": 128,
+  "unroll_min": 48,
+  "unroll_max": 64,
+  "learning_rate": 0.002,
+  "lr_decay_at": 2000,
+  "lr_decay": 0.1,
+  "update_probability": 0.5,
+  "wall_seconds": 3600,
+  "memory_mb": 3000,
+  "device": "cpu",
+  "threads": 2,
+  "checkpoint_every": 100,
+  "validation_every": 100,
+  "log_every": 10
+}

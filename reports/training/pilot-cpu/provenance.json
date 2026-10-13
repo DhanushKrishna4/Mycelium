@@ -1,0 +1,29 @@
+{
+  "source_run": "runs/pilot-cpu",
+  "records": 50,
+  "logs_complete": true,
+  "note": "All recorded updates and fields retained; JSON whitespace compacted.",
+  "files": {
+    "summary.json": {
+      "sha256": "047425d5fae42d00cdbf669e4653f34cbef1ff61182010e01bf374f93e44ea51",
+      "bytes": 1159
+    },
+    "config.json": {
+      "sha256": "bfc1259d0f2fdc3e09e862bac9ba0c5c639788e50c66ef2267fbf299de2f70a1",
+      "bytes": 477
+    },
+    "environment.json": {
+      "sha256": "91b9f2d0887bda2eed80fc618b537f7b683a19900e5501416c657e618678c145",
+      "bytes": 192
+    },
+    "target.npy": {
+      "sha256": "5ae61a0d4c12d6f9ad23a002c71b6914ec0396bd6882dae7993ee5e514556b84",
+      "bytes": 16512
+    },
+    "training.jsonl": {
+      "sha256": "7f986eed90eaefd8948ebb97705692b263d469e8a4e168144b5f81cc156edd88",
+      "bytes": 23724
+    }
+  },
+  "source_training_log_sha256": "aa0437298402116fec30bc631d0f5fe5e545a46056f09a3ac7bf544c2370b55b"
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "mycelium.demo.v1",
+  "weights_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+  "seed": 90501,
+  "frames": 129,
+  "simulation_steps": 512,
+  "sample_every": 4,
+  "damage": {
+    "step": 256,
+    "type": "erase",
+    "shape": "rectangle",
+    "x": 16,
+    "y": 9,
+    "width": 7,
+    "height": 9
+  },
+  "note": "Actual independent demonstration rollout. This GIF is recorded; the application is live."
+}

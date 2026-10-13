@@ -1,0 +1,75 @@
+{
+  "parity": {
+    "schema": "mycelium.parity.v1",
+    "passed": true,
+    "numpy_version": "2.0.2",
+    "reference": {
+      "backend": "PyTorch CPU",
+      "torch": "2.6.0",
+      "python": "3.12.4",
+      "platform": "macOS-27.0-arm64-arm-64bit",
+      "description": "Frozen explicit masks; nonzero learned update fixture; not trained weights."
+    },
+    "weights_hash": "292262e39cae072a595697e2de6db5ee2cd82e1f6c3710cc9675265489613d98",
+    "rtol": 0.00002,
+    "atol": 0.000002,
+    "checks": [
+      {
+        "name": "perception",
+        "passed": true,
+        "max_absolute_error": 0,
+        "max_tolerance_ratio": 0,
+        "values": 1200
+      },
+      {
+        "name": "network_delta",
+        "passed": true,
+        "max_absolute_error": 2.60770320892334e-8,
+        "max_tolerance_ratio": 0.008351426579712185,
+        "values": 400
+      },
+      {
+        "name": "one_step",
+        "passed": true,
+        "max_absolute_error": 5.960464477539063e-8,
+        "max_tolerance_ratio": 0.004939002317119767,
+        "values": 400
+      },
+      {
+        "name": "rollout_8",
+        "passed": true,
+        "max_absolute_error": 1.1920928955078125e-7,
+        "max_tolerance_ratio": 0.018849146036925574,
+        "values": 400
+      },
+      {
+        "name": "threshold_step",
+        "passed": true,
+        "max_absolute_error": 0,
+        "values": 400
+      }
+    ]
+  },
+  "benchmark": {
+    "schema": "mycelium.browser-benchmark.v1",
+    "grid": [
+      32,
+      32,
+      16
+    ],
+    "finite": true,
+    "model_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+    "starting_step": 421,
+    "occupied_cells": 351,
+    "pyodide": "0.27.7",
+    "numpy": "2.0.2",
+    "measured_steps": 128,
+    "warmup_steps": 16,
+    "branches": 1,
+    "chunk_steps": 8,
+    "milliseconds": 306.09999999403954,
+    "steps_per_second": 418.16399870138014,
+    "includes": "Worker computation and chunk yields; excludes pixel rendering and startup.",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36"
+  }
+}

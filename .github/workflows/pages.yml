@@ -1,0 +1,59 @@
+name: Test, build, and deploy Pages
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: Publish the verified static bundle to GitHub Pages
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install native test dependencies (CPU only)
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          .venv/bin/python -m pip install -e '.[train,test]'
+      - name: Numerical, training, replay, and web checks
+        run: |
+          .venv/bin/python -m pytest -q
+          npm run check:web
+      - name: Acquire pinned browser assets and build from trained artifacts
+        run: |
+          npm run runtime
+          npm run build
+          .venv/bin/python scripts/verify_build.py
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy))
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

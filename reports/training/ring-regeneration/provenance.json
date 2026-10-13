@@ -1,0 +1,29 @@
+{
+  "source_run": "runs/ring-regeneration",
+  "records": 2500,
+  "logs_complete": true,
+  "note": "All recorded updates and fields retained; JSON whitespace compacted.",
+  "files": {
+    "summary.json": {
+      "sha256": "e5c565791961985db9fcd728245da371bc682b58e123a1b4c43d2f15f70a428d",
+      "bytes": 1219
+    },
+    "config.json": {
+      "sha256": "c27a94ad5addaadbe6fb2b43029ea42092fb710a92eb14d757f0d81af4f253d0",
+      "bytes": 493
+    },
+    "environment.json": {
+      "sha256": "91b9f2d0887bda2eed80fc618b537f7b683a19900e5501416c657e618678c145",
+      "bytes": 192
+    },
+    "target.npy": {
+      "sha256": "b63f6adb25fc96e072c201033b5d07b1eb951acc29988c1f3df4b67d90dca0ef",
+      "bytes": 16512
+    },
+    "training.jsonl": {
+      "sha256": "a98bc71690a7a94eb17a687166b0044f79b9e73bf5d4e24ec2e426715b5fe1ed",
+      "bytes": 1809038
+    }
+  },
+  "source_training_log_sha256": "b41b3c56277158929320335069ecdc50efc77ab163f67557e8ccf68c1dadac9b"
+}

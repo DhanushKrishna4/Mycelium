@@ -1,0 +1,44 @@
+{
+  "status": "update_budget_exhausted",
+  "convergence_claim": false,
+  "failure": null,
+  "updates": 2500,
+  "requested_updates": 2500,
+  "regime": "persistence",
+  "target": "ring",
+  "target_sha256": "14eb0d0ee45cfc85f9eb976d773a5a84085f43b5f8771e485ab4622bb4c3eeb7",
+  "initial_weights_sha256": "f33645dedf47d48cc454fd3acf426feb500e650dc2139b27568e9ed0ec32cbb4",
+  "seed": 42,
+  "device": "cpu",
+  "canvas": [
+    32,
+    32
+  ],
+  "channels": 16,
+  "batch_size": 4,
+  "pool_size": 128,
+  "unroll_range": [
+    48,
+    64
+  ],
+  "total_cell_steps": 572559360,
+  "training_seconds": 342.2113214160054,
+  "steady_update_seconds_median": 0.1302140000043437,
+  "steady_update_seconds_mean": 0.1331896715248594,
+  "last_objective_rgba_mse": 0.0010147200664505363,
+  "best_validation_score": 0.0030935670947656035,
+  "best_update": 2200,
+  "checkpoint": "runs/ring-persistence/checkpoints/step-002500.pt",
+  "model": "runs/ring-persistence/model.json",
+  "environment": {
+    "python": "3.12.4",
+    "numpy": "2.0.2",
+    "torch": "2.6.0",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "device": "cpu",
+    "threads": 2,
+    "mps_available": false
+  },
+  "peak_process_rss_mb": 602.0625
+}

@@ -1,0 +1,22 @@
+{
+  "name": "leaf",
+  "version": 2,
+  "shape": [
+    32,
+    32,
+    4
+  ],
+  "dtype": "float32",
+  "layout": "HWC",
+  "alpha": "premultiplied",
+  "sha256": "ce845d1699d15285512310f4e900c4842932930364ff7a1f13a8efc59332cc1f",
+  "hash_encoding": "little-endian-float32-HWC",
+  "preprocessing": "4x supersampling; premultiplied area average",
+  "bounds_xyxy": [
+    7,
+    7,
+    26,
+    26
+  ],
+  "license": "MIT; original procedural artwork"
+}

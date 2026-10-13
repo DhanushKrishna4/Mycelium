@@ -4,7 +4,7 @@ Tiny neural cellular automata, trained locally and running live in your browser.
 
 [Open Mycelium](https://dhanushkrishna4.github.io/Mycelium/) · [Source repository](https://github.com/DhanushKrishna4/Mycelium)
 
-The public release is underway as of 2026-10-13. The Pages address above is the deployment destination; hosted verification is still pending.
+Published on GitHub Pages and verified on 2026-10-13: live Python growth, damage/recovery, extinction, explicit reseeding, and numerical parity. [Deployment verification](reports/deployment-verification.json) records the tested commit and hosted asset checks.
 
 ![Actual trained ring rollout, with rectangle damage at step 256](reports/demo.gif)
 
@@ -63,7 +63,7 @@ The 50-update pilots included unrolls up to 96. CPU median update: **0.163 s**, 
 
 The recorded Chromium browser benchmark measured **418 steps/s** for one 32×32 model over 128 steps, including worker chunk yields and excluding rendering/startup. This is one measurement on this machine, not a frame-rate promise. The default playback is 60 steps/s. [Browser diagnostics](reports/browser-diagnostics.json) include version, checkpoint hash, parity errors, and benchmark conditions.
 
-Verification includes **41 native tests**, **3 JavaScript tests**, actual browser numerical parity, live imports/exports and recovery, and production HTTP asset checks under `/Mycelium/`. [The browser verification record](reports/browser-verification.json) lists individual observations. Safari/Firefox, physical touch, real background-tab pause, and hosted Pages remain unverified; a narrow Chromium viewport is not a physical-device test.
+Verification includes **41 native tests**, **3 JavaScript tests**, actual browser numerical parity, live imports/exports and recovery, and production HTTP asset checks under `/Mycelium/`. [The browser verification record](reports/browser-verification.json) lists individual observations. Safari/Firefox, physical touch, and real background-tab pause remain unverified; a narrow Chromium viewport is not a physical-device test.
 
 ## Train, resume, evaluate
 
@@ -95,7 +95,7 @@ Replay uses PCG64 and a specified float32 sampling convention. Exact continuatio
 
 ## Deploy
 
-The [GitHub Actions workflow](.github/workflows/pages.yml) runs checks and builds the site on pushes to `main`, then deploys to [GitHub Pages](https://dhanushkrishna4.github.io/Mycelium/) after those checks pass. Pull requests run checks and build only. A manual dispatch on `main` can also deploy when its `deploy` input is enabled. Pages is configured to use **GitHub Actions** in the [public repository](https://github.com/DhanushKrishna4/Mycelium). The site supports repository subpaths, including the case-sensitive `/Mycelium/`. See [deployment instructions](docs/deployment.md); a successful deployment must still be followed by a hosted runtime check.
+The [GitHub Actions workflow](.github/workflows/pages.yml) runs checks and builds the site on pushes to `main`, then deploys to [GitHub Pages](https://dhanushkrishna4.github.io/Mycelium/) after those checks pass. Pull requests run checks and build only. A manual dispatch on `main` can also deploy when its `deploy` input is enabled. Pages is configured to use **GitHub Actions** in the [public repository](https://github.com/DhanushKrishna4/Mycelium). The site supports repository subpaths, including the case-sensitive `/Mycelium/`. See [deployment instructions](docs/deployment.md) and [the recorded hosted runtime check](reports/deployment-verification.json).
 
 ## Research credit
 

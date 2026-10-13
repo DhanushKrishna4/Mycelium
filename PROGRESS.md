@@ -1,14 +1,14 @@
 # Mycelium progress — 2026-10-13
 
-Implementation, five bounded training runs, frozen evaluation, and the local static application are delivered. Failed model gates and unverified platform checks are listed below. The local implementation and browser evidence were completed on 2026-10-11; public release work is underway on 2026-10-13.
+Implementation, five bounded training runs, frozen evaluation, and the local static application are delivered. Failed model gates and unverified platform checks are listed below. The local implementation and browser evidence were completed on 2026-10-11; public deployment and hosted verification were completed on 2026-10-13.
 
-## Public release underway
+## Public release
 
 - Repository created: [DhanushKrishna4/Mycelium](https://github.com/DhanushKrishna4/Mycelium); Pages configured to use GitHub Actions.
-- Deployment destination: [https://dhanushkrishna4.github.io/Mycelium/](https://dhanushkrishna4.github.io/Mycelium/). Hosted runtime verification remains pending.
+- Deployment destination: [https://dhanushkrishna4.github.io/Mycelium/](https://dhanushkrishna4.github.io/Mycelium/). Hosted Python growth, damage/recovery, extinction, explicit seeding, and numerical parity passed.
 - The workflow now deploys `main` pushes after checks and the static build pass. Pull requests are checks/builds only; manual dispatch retains an explicit `deploy` input.
 - Fresh isolated Python packaging exposed an incompatible license field with the pinned build backend. The compatible license table fixed it, and the isolated wheel build passed. Native tests (41) and JavaScript tests (3) passed again before publication.
-- Initial commit/push, deployment completion, and the hosted browser report are the remaining release steps. Model results below are unchanged.
+- Initial commit `32c2ee6` was pushed and the GitHub Actions build/deployment passed. All 98 publicly served assets matched their manifest hashes; `.nojekyll` is a deployment marker and is not publicly served. See `reports/deployment-verification.json`. GitHub confirmed only `DhanushKrishna4` as author, committer, and contributor. Model results below are unchanged.
 
 ## Completed milestones
 
@@ -42,7 +42,7 @@ Actual Chromium worker benchmark: 418.16 steps/s, one 32×32 model, 16 warmup + 
 
 Leaf and rosette fail the 1,024-step persistence gate. Growth-only ring fails the 256-step growth gate. One ring-persistence recovery later deteriorates (8/9 retained recoveries). These are single-training-seed case studies; no independent training replication or generalization to unseen images is claimed. Large cuts can fail; total erasure stays extinct until an explicit seed.
 
-Actual background-tab pause, Safari/Firefox, physical touch, actual browser zoom, outside-canvas dragging, reduced-motion emulation/screen-reader operation, live hanging-worker termination, and hosted GitHub Pages remain unverified. Source handlers and relevant transport/coordinate tests exist, but are not substitutes for those device checks. `reports/browser-verification.json` separates passed observations from unverified checks.
+Actual background-tab pause, Safari/Firefox, physical touch, actual browser zoom, outside-canvas dragging, reduced-motion emulation/screen-reader operation, and live hanging-worker termination remain unverified. Source handlers and relevant transport/coordinate tests exist, but are not substitutes for those device checks. `reports/browser-verification.json` separates passed observations from unverified checks.
 
 ## Exact commands
 

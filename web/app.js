@@ -178,6 +178,8 @@ function update(result) {
   if (extinct || failed) {
     setPlaying(false);
     $('canvas-hint').textContent = failed ? 'Numerical failure. Inspect the saved state or restart.' : 'Extinct. Plant a seed to begin again.';
+  } else {
+    $('canvas-hint').textContent = result.mode === 'compare' ? 'Both cultures receive the same interventions.' : result.mode === 'paired' ? 'Interventions affect branch B only.' : 'Grow a pattern, then drag to erase.';
   }
   if (result.branches) {
     result.branches.forEach((branch, index) => { $(index ? 'branch-b' : 'branch-a').textContent = `${index ? 'B' : 'A'} / ${regimeName(branch.regime)} · #${branch.checkpoint}${state.paired ? (index ? ' · perturbed' : ' · control') : ''}`; });

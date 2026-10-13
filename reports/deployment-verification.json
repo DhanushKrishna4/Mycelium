@@ -1,0 +1,137 @@
+{
+  "schema": "mycelium.deployment-verification.v1",
+  "date": "2026-10-13",
+  "repository": "https://github.com/DhanushKrishna4/Mycelium",
+  "url": "https://dhanushkrishna4.github.io/Mycelium/",
+  "scope": "Initial published release; later documentation and UI-only follow-up commits do not change the recorded experiment or numerical runtime.",
+  "tested_commit": "32c2ee6c8dbb26db18f3d87d52c4cc85c80d25e3",
+  "github_actions": {
+    "run": "https://github.com/DhanushKrishna4/Mycelium/actions/runs/38384315670",
+    "build": "success",
+    "deploy": "success",
+    "native_tests_passed": 41,
+    "javascript_tests_passed": 3
+  },
+  "http": {
+    "url": "https://dhanushkrishna4.github.io/Mycelium/",
+    "assets_verified": 98,
+    "asset_bytes": 29978193,
+    "manifest_sha256": "6515f8a5a124a814f15cd56fb93e0d552bf3087b1949a9193529fab4bbfcf819",
+    "shared_python_and_web_sources_match_checkout": true,
+    "model_artifacts_match_checkout": true,
+    "all_served_asset_sizes_and_hashes_match": true,
+    "hosting_metadata_not_served": [
+      {
+        "file": ".nojekyll",
+        "http_status": 404,
+        "note": "Deployment marker, not a runtime dependency; GitHub Pages does not serve this dotfile."
+      }
+    ]
+  },
+  "browser": {
+    "engine": "Chromium in-app browser",
+    "cold_load": "passed: actual Pyodide/NumPy worker loaded from GitHub Pages",
+    "pause": "passed",
+    "growth": {
+      "step": 2395,
+      "occupied": 356,
+      "iou_displayed": 0.958,
+      "empty_relative_error_displayed": 0.015
+    },
+    "damage": {
+      "action": "Erase center",
+      "step": 2395,
+      "occupied": 275,
+      "iou_displayed": 0.73,
+      "empty_relative_error_displayed": 0.209
+    },
+    "subsequent_recovery": {
+      "step": 5759,
+      "occupied": 355,
+      "iou_displayed": 0.961,
+      "empty_relative_error_displayed": 0.015,
+      "note": "Exploratory hosted smoke check, not an additional frozen evaluation trial or recovery-time estimate."
+    },
+    "total_erasure": {
+      "step": 5760,
+      "occupied": 0,
+      "iou_displayed": 0,
+      "empty_relative_error_displayed": 1,
+      "status": "Extinct"
+    },
+    "explicit_seed": {
+      "step": 5760,
+      "occupied": 1,
+      "status": "Ready"
+    },
+    "parity": {
+      "schema": "mycelium.parity.v1",
+      "passed": true,
+      "numpy_version": "2.0.2",
+      "reference": {
+        "backend": "PyTorch CPU",
+        "torch": "2.6.0",
+        "python": "3.12.4",
+        "platform": "macOS-27.0-arm64-arm-64bit",
+        "description": "Frozen explicit masks; nonzero learned update fixture; not trained weights."
+      },
+      "weights_hash": "292262e39cae072a595697e2de6db5ee2cd82e1f6c3710cc9675265489613d98",
+      "rtol": 2e-05,
+      "atol": 2e-06,
+      "checks": [
+        {
+          "name": "perception",
+          "passed": true,
+          "max_absolute_error": 0,
+          "max_tolerance_ratio": 0,
+          "values": 1200
+        },
+        {
+          "name": "network_delta",
+          "passed": true,
+          "max_absolute_error": 2.60770320892334e-08,
+          "max_tolerance_ratio": 0.008351426579712185,
+          "values": 400
+        },
+        {
+          "name": "one_step",
+          "passed": true,
+          "max_absolute_error": 5.960464477539063e-08,
+          "max_tolerance_ratio": 0.004939002317119767,
+          "values": 400
+        },
+        {
+          "name": "rollout_8",
+          "passed": true,
+          "max_absolute_error": 1.1920928955078125e-07,
+          "max_tolerance_ratio": 0.018849146036925574,
+          "values": 400
+        },
+        {
+          "name": "threshold_step",
+          "passed": true,
+          "max_absolute_error": 0,
+          "values": 400
+        }
+      ]
+    }
+  },
+  "git_attribution": {
+    "author_login": "DhanushKrishna4",
+    "committer_login": "DhanushKrishna4",
+    "contributors": [
+      "DhanushKrishna4"
+    ],
+    "coauthor_trailers": false,
+    "verified_by": [
+      "GitHub REST commit and contributors endpoints",
+      "Public repository commit bar and Contributors section"
+    ]
+  },
+  "verified_runtime_source_hashes": {
+    "web/worker.js": "6b8316441228f3fdf3bf33f1bfc83df5abe58c23d66c9e1f002b4049cfd8000b",
+    "src/mycelium_nca/browser.py": "1430a839c5045d2d2b020e64a0ebb19e747bf108d111009f98abaf6e8d20753b",
+    "src/mycelium_nca/numpy_sim.py": "e9b721152f2fe9341e20736cb7ff866dbd8709d797f9e22a2ea74776019c378c",
+    "src/mycelium_nca/replay.py": "900af880ef7d48479b34d81392fea38001d9cbbbd948b89a2a6a65a031f78f1a"
+  }
+}

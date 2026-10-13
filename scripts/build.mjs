@@ -61,6 +61,14 @@ async function main() {
   await mkdir(join(temporary, 'runtime'), { recursive: true });
   await mkdir(join(temporary, 'targets'), { recursive: true });
   for (const file of ['index.html', 'style.css', 'app.js', 'runtime-client.js', 'worker.js', 'icon.svg']) await cp(join(root, 'web', file), join(temporary, file));
+  // Pages caches static assets. Give changed entrypoints distinct URLs so a
+  // fresh document cannot reuse an older interface script or stylesheet.
+  let html = await readFile(join(temporary, 'index.html'), 'utf8');
+  for (const file of ['app.js', 'style.css']) {
+    const version = digest(await readFile(join(temporary, file))).slice(0, 16);
+    html = html.replaceAll(`./${file}`, `./${file}?v=${version}`);
+  }
+  await writeFile(join(temporary, 'index.html'), html);
   for (const file of ['LICENSE', 'THIRD_PARTY.md']) await cp(join(root, file), join(temporary, file));
   for (const directory of ['models', 'reports', 'fixtures']) {
     try { await cp(join(root, directory), join(temporary, directory), { recursive: true }); }

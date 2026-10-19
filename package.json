@@ -8,7 +8,7 @@
     "runtime": "node scripts/acquire-runtime.mjs",
     "build": "node scripts/build.mjs",
     "serve": "python3 -m http.server 8080 --directory dist",
-    "check:web": "node --check web/app.js && node --check web/worker.js && node --check web/runtime-client.js && node --test web/runtime-client.test.mjs"
+    "check:web": "node --check web/app.js && node --check web/results-view.js && node --check web/worker.js && node --check web/runtime-client.js && node --test web/runtime-client.test.mjs"
   },
   "engines": { "node": ">=20" }
 }

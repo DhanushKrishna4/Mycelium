@@ -1,9 +1,34 @@
 import { RuntimeClient, cellAt } from './runtime-client.js';
+import { renderResults } from './results-view.js';
 
 const $ = (id) => document.getElementById(id);
 const state = { client: null, manifest: null, targets: {}, model: null, secondModel: null, target: null, mode: 'grow', paired: false, playing: false, ready: false, brush: 'erase', last: null, lastTick: 0, pendingSteps: 0, chunk: 4, stats: [], lastRender: 0, frames: [], noticeTimer: null, parity: null, benchmark: null };
 const regimeName = (regime) => ({ growth: 'Growth only', persistence: 'Persistence', regeneration: 'Regeneration' }[regime] || regime || 'Imported model');
-const explanations = { grow: 'A pattern begins with one cell.', repair: 'Intervene. Watch what the rule can rebuild.', compare: 'Same experiment. Different learned rules.', inspect: 'Look beneath the visible pattern.' };
+const modes = {
+  grow: { kicker: 'Experiment 01 / Emergence', title: 'From one<br>cell, <em>form.</em>', copy: 'A single seed. A shared local rule. Watch a pattern assemble itself, one update at a time.', guide: 'Let the seed grow, then try removing part of it. The target is a reference, never an input to the live rule.', next: 'Try a repair', destination: 'repair' },
+  repair: { kicker: 'Experiment 02 / Regeneration', title: 'Erase.<br><em>Then observe.</em>', copy: 'What survives when part of a pattern disappears? Erase living tissue and follow the rule’s response.', guide: 'Start with a mature culture. Erase its center or cut one half, then press Grow. Repair is learned, never guaranteed.', next: 'Compare learned rules', destination: 'compare' },
+  compare: { kicker: 'Experiment 03 / Controlled comparison', title: 'One seed.<br><em>Two rules.</em>', copy: 'Change the training, hold the experiment still. Two rules receive the same random updates and interventions.', guide: 'Growth, persistence, and regeneration differ in training. The growth-only ring can fail to remain. Every failure belongs in the comparison.', next: 'Look beneath the surface', destination: 'inspect' },
+  inspect: { kicker: 'Experiment 04 / Hidden state', title: 'Beyond<br><em>the visible.</em>', copy: 'Visible color is only four of sixteen channels. Look inside the state, or fork a controlled perturbation.', guide: 'Choose a hidden channel or update magnitude. Fork a mature state to measure the effect of an intervention on branch B.', next: 'Return to growth', destination: 'grow' }
+};
+const explanations = Object.fromEntries(Object.entries(modes).map(([key, value]) => [key, value.copy]));
+const notebookNote = 'Save the complete state, random stream, and intervention history. Reopen it to continue the same experiment in this runtime.';
+function runtimeControls(ready) {
+  for (const control of document.querySelectorAll('#workspace button, #workspace input, #workspace select')) {
+    if (control.matches('[data-mode], #next-experiment')) continue;
+    control.disabled = !ready || (control.id === 'export-diagnostics' && !state.parity && !state.benchmark);
+  }
+  for (const id of ['canvas-a', 'canvas-b']) $(id).setAttribute('aria-disabled', String(!ready));
+}
+function viewHelp() {
+  $('channel-controls').hidden = $('view').value !== 'hidden';
+  $('view-help').hidden = $('view').value === 'hidden';
+  $('view-help').textContent = { rgba: 'Visible channels are premultiplied RGB and alpha. Display clipping leaves internal states unchanged.', alpha: 'Alpha is shown on a fixed scale from 0 (dark) to 1 (lime). Living masks use the documented 0.1 threshold.', delta: 'Root-mean-square magnitude of the most recent local update. Fixed display scale 0–0.05.' }[$('view').value] || '';
+}
+function cultureHint() {
+  const status = state.last?.status || '';
+  $('canvas-hint').textContent = /fail|nonfinite|unstable/i.test(status) ? 'Numerical failure. Inspect the saved state or restart.' : status === 'extinct' ? 'Extinct. Plant a seed to begin again.' : state.paired ? 'A is the control. Interventions affect B only.' : state.mode === 'compare' ? 'Both cultures receive the same interventions.' : { erase: 'Drag to erase tissue. Use presets for a precise cut.', seed: 'Click to plant an explicit seed.', lesion: 'Paint a persistent lesion. Clear it to permit growth.', noise: 'Drag to add bounded, seeded noise.' }[state.brush];
+}
+
 const descriptions = { erase: 'Erase zeros all 16 channels. Drag on the canvas, or use a preset.', seed: 'Insert the documented seed: zero RGB, alpha and hidden channels set to one.', lesion: 'A persistent lesion keeps every channel zero until lesions are cleared.', noise: 'Seeded uniform noise in all channels, bounded by the selected amplitude.' };
 const fmt = (value, digits = 4) => Number.isFinite(value) ? value.toFixed(digits) : '—';
 
@@ -18,13 +43,14 @@ function setPlaying(playing) {
   $('play').innerHTML = state.playing ? '<span aria-hidden="true">Ⅱ</span> Pause' : '<span aria-hidden="true">▶</span> Grow';
   $('play').setAttribute('aria-label', state.playing ? 'Pause simulation' : 'Play simulation');
   $('sim-live-dot').style.opacity = state.playing ? '1' : '.4';
-  if (state.ready && state.last?.status === 'ready') $('state-value').textContent = state.playing ? 'Evolving' : 'Ready';
+  if (state.ready && state.last?.status === 'ready') $('state-value').textContent = state.playing ? 'Growing' : 'Paused';
   state.lastTick = performance.now();
   state.pendingSteps = 0;
   if (!state.playing) { $('sps-value').textContent = '—'; $('fps-value').textContent = '—'; }
 }
 function runtimeFailure(error) {
   state.ready = false;
+  runtimeControls(false);
   setPlaying(false);
   $('runtime-label').textContent = 'Runtime unavailable';
   $('runtime-dot').className = 'status-dot error';
@@ -32,6 +58,7 @@ function runtimeFailure(error) {
   $('loading-title').textContent = 'The culture is on hold.';
   $('loading-message').textContent = error.message;
   $('retry').hidden = false;
+  $('retry').disabled = false;
   $('state-value').textContent = 'Unavailable';
 }
 async function command(request, { render = true } = {}) {
@@ -41,6 +68,10 @@ async function command(request, { render = true } = {}) {
     if (!result) return null;
     if (result.download) download(result.download.data, result.download.name, result.download.mime);
     if (render && result.pixels) update(result);
+    if (request.type === 'event') {
+      const action = { erase: 'Tissue erased', seed: 'Seed intervention applied', lesion: 'Persistent lesion applied', noise: 'Seeded noise applied', clear: 'All tissue erased', clear_lesions: 'Lesions cleared' }[request.kind] || 'Intervention applied';
+      $('last-action').textContent = `${action} at step ${result.step ?? '—'}. ${state.paired ? 'Branch B only.' : state.mode === 'compare' ? 'Both cultures.' : ''}`;
+    }
     return result;
   } catch (error) { notice(error.message); return null; }
 }
@@ -115,6 +146,8 @@ function layoutBranches(two) {
   $('culture-b').hidden = !two;
   $('branch-a').hidden = !two;
   $('legend-b').hidden = !two;
+  $('branch-metrics-a').hidden = !two;
+  $('branch-metrics-b').hidden = !two;
   $('difference-panel').hidden = !state.paired;
   document.body.dataset.paired = String(state.paired);
 }
@@ -126,6 +159,7 @@ async function reset() {
   layoutBranches(state.mode === 'compare');
   state.client.nextGeneration();
   state.stats = []; state.frames = [];
+  $('last-action').textContent = 'New run. No interventions yet.';
   const result = await command({ type: 'reset', model: state.model, secondModel: state.secondModel, mode: state.mode === 'compare' ? 'compare' : 'single', seed: Math.min(4294967295, Math.max(0, Math.floor(Number($('random-seed').value)) || 0)) });
   if (!result) return;
   await settings();
@@ -142,6 +176,17 @@ function setMode(mode, { preserve = false } = {}) {
     button.setAttribute('aria-pressed', String(active));
   }
   $('mode-explainer').textContent = explanations[mode];
+  $('mode-kicker').textContent = modes[mode].kicker;
+  $('mode-title').innerHTML = modes[mode].title;
+  $('mode-guidance').textContent = modes[mode].guide;
+  $('next-experiment').replaceChildren(document.createTextNode(modes[mode].next + ' '), Object.assign(document.createElement('span'), { textContent: '→' }));
+  $('specimen-tools').open = mode === 'grow' || mode === 'compare';
+  $('intervention-tools').open = mode === 'repair' || (mode === 'inspect' && state.paired);
+  $('inspection-tools').open = mode === 'inspect';
+  if (previous !== mode) {
+    const lab = document.querySelector('.laboratory'); lab.dataset.changing = 'true';
+    setTimeout(() => delete lab.dataset.changing, 280);
+  }
   $('comparison-controls').hidden = mode !== 'compare';
   history.replaceState(null, '', `#${mode}`);
   if (mode === 'compare' && state.ready && !preserve) {
@@ -150,7 +195,7 @@ function setMode(mode, { preserve = false } = {}) {
     reset();
   } else if (previous === 'compare' && state.ready && !preserve) reset();
   if (mode !== 'inspect' && state.paired && !preserve) reset();
-  $('canvas-hint').textContent = mode === 'compare' ? 'Both cultures receive the same interventions.' : state.paired ? 'Interventions affect branch B only.' : 'Grow a pattern, then drag to erase.';
+  cultureHint();
 }
 async function settings() {
   return command({ type: 'settings', probability: Number($('probability').value), view: $('view').value, channel: Number($('channel').value) });
@@ -173,16 +218,15 @@ function update(result) {
   const status = result.status || 'ready';
   const extinct = status === 'extinct';
   const failed = /fail|nonfinite|unstable/i.test(status);
-  $('state-value').textContent = failed ? 'Unstable' : extinct ? 'Extinct' : state.playing ? 'Evolving' : 'Ready';
+  $('state-value').textContent = failed ? 'Unstable' : extinct ? 'Extinct' : state.playing ? 'Growing' : 'Paused';
   $('state-value').style.color = failed ? '#e9a489' : extinct ? 'var(--amber)' : 'var(--accent)';
-  if (extinct || failed) {
-    setPlaying(false);
-    $('canvas-hint').textContent = failed ? 'Numerical failure. Inspect the saved state or restart.' : 'Extinct. Plant a seed to begin again.';
-  } else {
-    $('canvas-hint').textContent = result.mode === 'compare' ? 'Both cultures receive the same interventions.' : result.mode === 'paired' ? 'Interventions affect branch B only.' : 'Grow a pattern, then drag to erase.';
-  }
+  if (extinct || failed) setPlaying(false);
+  cultureHint();
   if (result.branches) {
-    result.branches.forEach((branch, index) => { $(index ? 'branch-b' : 'branch-a').textContent = `${index ? 'B' : 'A'} / ${regimeName(branch.regime)} · #${branch.checkpoint}${state.paired ? (index ? ' · perturbed' : ' · control') : ''}`; });
+    result.branches.forEach((branch, index) => {
+      $(index ? 'branch-b' : 'branch-a').textContent = `${index ? 'B' : 'A'} / ${state.paired ? (index ? 'Perturbed' : 'Control') : regimeName(branch.regime)} · ${failed ? 'Stopped' : branch.status === 'extinct' ? 'Extinct' : 'Living'}`;
+      $(index ? 'branch-metrics-b' : 'branch-metrics-a').textContent = `IoU ${fmt(result.metrics?.[index]?.iou, 3)} · ${result.metrics?.[index]?.occupied ?? '—'} cells`;
+    });
     const first = result.branches[0];
     if (first) {
       $('checkpoint-name').textContent = `${regimeName(first.regime)} · ${state.manifest.models.find((model) => model.id === first.id)?.checkpoint_update ?? first.checkpoint ?? first.id}`;
@@ -194,10 +238,15 @@ function update(result) {
     drawPixels($('hidden-difference'), result.inspection.hiddenDifference);
     $('divergence-value').textContent = `VISIBLE ${fmt(result.divergence?.visible ?? result.divergence, 5)} / HIDDEN ${fmt(result.divergence?.hidden ?? result.hiddenDivergence, 5)}`;
   }
-  if (result.historyPartial) $('experiment-note').textContent = 'The bounded event history is partial. Export includes the complete current state and random stream for exact continuation in this runtime.';
+  $('experiment-note').textContent = result.historyPartial ? 'The bounded event history is partial. Export includes the complete current state and random stream for exact continuation in this runtime.' : notebookNote;
+  const latest = result.curves?.at(-1);
+  $('curve-summary').textContent = latest ? `Step ${latest.step}. Empty-relative error: ${(latest.errors || []).map((error, i) => `${i ? 'B' : 'A'} ${fmt(error, 4)}`).join(', ')}. ${result.curves.length} retained samples.` : 'No measurements yet.';
   drawChart(result.curves || []);
   if (state.paired) drawChart((result.curves || []).map((point) => ({ step: point.step, errors: [point.divergence?.visible, point.divergence?.hidden] })), 'divergence-chart');
   state.lastRender = now;
+}
+function chartNumber(value) {
+  return value !== 0 && (Math.abs(value) >= 1000 || Math.abs(value) < .001) ? value.toExponential(1) : value.toFixed(Math.abs(value) < .01 ? 4 : 2);
 }
 function drawChart(curves, canvasId = 'error-chart') {
   const canvas = $(canvasId);
@@ -207,28 +256,31 @@ function drawChart(curves, canvasId = 'error-chart') {
   const context = canvas.getContext('2d');
   context.scale(dpr, dpr);
   const width = rect.width, height = rect.height;
-  const left = 40, right = width - 8, top = 10, bottom = height - 20;
+  if (width < 80 || height < 50) return;
+  const left = 52, right = width - 10, top = 14, bottom = height - 26;
+  const palette = getComputedStyle(document.documentElement);
+  const color = (token) => palette.getPropertyValue(token).trim();
   const values = curves.flatMap((point) => point.errors || []).filter(Number.isFinite);
   if (canvasId === 'error-chart') $('chart-empty').hidden = curves.length > 1;
   const max = values.length ? Math.max(...values, .00001) * 1.08 : 1;
   const minStep = curves[0]?.step || 0;
   const maxStep = Math.max(curves.at(-1)?.step || 0, minStep + 1);
-  context.font = '8px ui-monospace, monospace';
+  context.font = '10px ui-monospace, monospace';
   context.lineWidth = 1;
   for (let i = 0; i < 3; i++) {
     const y = top + i * (bottom - top) / 2;
-    context.strokeStyle = '#36432f'; context.beginPath(); context.moveTo(left, y); context.lineTo(right, y); context.stroke();
-    context.fillStyle = '#8f9e82'; context.textAlign = 'right'; context.fillText((max * (1 - i / 2)).toFixed(max < .01 ? 4 : 3), left - 7, y + 3);
+    context.strokeStyle = color('--line'); context.beginPath(); context.moveTo(left, y); context.lineTo(right, y); context.stroke();
+    context.fillStyle = color('--faint'); context.textAlign = 'right'; context.fillText(chartNumber(max * (1 - i / 2)), left - 7, y + 3);
   }
   context.textAlign = 'left'; context.fillText(String(minStep), left, height - 3);
   context.textAlign = 'right'; context.fillText(String(maxStep), right, height - 3);
   const branches = Math.max(...curves.map((point) => point.errors?.length || 0), 1);
   for (let branch = 0; branch < branches; branch++) {
-    context.strokeStyle = branch ? '#8bb6c2' : '#c2d392'; context.lineWidth = 1.7; context.beginPath();
+    context.strokeStyle = color(branch ? '--blue' : '--accent'); context.lineWidth = 1.8; context.beginPath();
     let started = false;
     for (const point of curves) {
       const value = point.errors?.[branch];
-      if (!Number.isFinite(value)) continue;
+      if (!Number.isFinite(value)) { started = false; continue; }
       const x = left + (point.step - minStep) / (maxStep - minStep) * (right - left);
       const y = bottom - value / max * (bottom - top);
       if (!started) { context.moveTo(x, y); started = true; } else context.lineTo(x, y);
@@ -236,6 +288,18 @@ function drawChart(curves, canvasId = 'error-chart') {
     context.stroke();
   }
 }
+$('error-chart').addEventListener('pointermove', (event) => {
+  const points = state.last?.curves || [];
+  if (points.length < 2) return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  const fraction = Math.max(0, Math.min(1, (event.clientX - rect.left - 52) / Math.max(1, rect.width - 62)));
+  const step = points[0].step + fraction * (points.at(-1).step - points[0].step);
+  const point = points.reduce((best, value) => Math.abs(value.step - step) < Math.abs(best.step - step) ? value : best);
+  $('chart-tooltip').textContent = `Step ${point.step}\n${point.errors.map((value, i) => `${i ? 'B' : 'A'} · ${fmt(value, 4)}`).join('\n')}`;
+  $('chart-tooltip').hidden = false;
+  $('chart-tooltip').style.left = `${Math.max(0, Math.min(rect.width - 155, event.clientX - rect.left + 14))}px`;
+});
+$('error-chart').addEventListener('pointerleave', () => { $('chart-tooltip').hidden = true; });
 async function animate(now) {
   requestAnimationFrame(animate);
   if (!state.playing || !state.ready || document.hidden) return;
@@ -269,9 +333,11 @@ let importKind = 'importExperiment';
 function openImport(kind) { importKind = kind; $('file-input').value = ''; $('file-input').click(); }
 async function boot() {
   state.client?.terminate();
-  state.ready = false; setPlaying(false); state.paired = false;
+  state.ready = false; runtimeControls(false); setPlaying(false); state.paired = false;
+  state.parity = null; state.benchmark = null;
+  $('diagnostic-result').textContent = 'No browser diagnostics run yet.';
   $('loading-overlay').hidden = false; $('retry').hidden = true;
-  $('loading-title').textContent = 'A little Python. A living world.';
+  $('loading-title').textContent = 'Preparing a place to grow.';
   $('loading-message').textContent = 'Loading the local simulation engine…';
   $('runtime-dot').className = 'status-dot loading'; $('runtime-label').textContent = 'Preparing Python';
   const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
@@ -284,7 +350,7 @@ async function boot() {
     selectTarget(state.manifest.defaultTarget || state.manifest.models.find((model) => model.regime === 'regeneration')?.target || state.manifest.models[0].target, false);
     $('loading-overlay').hidden = true;
     $('runtime-dot').className = 'status-dot'; $('runtime-label').textContent = 'Python / local';
-    for (const id of ['play', 'step', 'restart', 'model-select']) $(id).disabled = false;
+    runtimeControls(true);
     update(result);
     setMode(location.hash.slice(1) || 'grow');
     await reset();
@@ -293,13 +359,17 @@ async function boot() {
   } catch (error) { runtimeFailure(error); }
 }
 
+$('next-experiment').addEventListener('click', () => setMode(modes[state.mode].destination));
 for (const button of document.querySelectorAll('[data-mode]')) button.addEventListener('click', () => setMode(button.dataset.mode));
 for (const button of document.querySelectorAll('[data-brush]')) button.addEventListener('click', () => {
   state.brush = button.dataset.brush;
   for (const item of document.querySelectorAll('[data-brush]')) { const active = item === button; item.classList.toggle('active', active); item.setAttribute('aria-pressed', String(active)); }
-  $('noise-controls').hidden = state.brush !== 'noise'; $('brush-help').textContent = descriptions[state.brush];
+  $('noise-controls').hidden = state.brush !== 'noise'; $('brush-help').textContent = descriptions[state.brush]; cultureHint();
 });
-$('play').addEventListener('click', () => setPlaying(!state.playing));
+$('play').addEventListener('click', () => {
+  if (/fail|nonfinite|unstable/i.test(state.last?.status || '')) { notice('This run stopped after a numerical failure. Restart or export the saved state to inspect it.'); return; }
+  setPlaying(!state.playing);
+});
 $('step').addEventListener('click', () => { setPlaying(false); command({ type: 'tick', steps: 1 }); });
 $('restart').addEventListener('click', reset);
 $('model-select').addEventListener('change', () => { state.model = $('model-select').value; reset(); });
@@ -311,9 +381,7 @@ $('noise').addEventListener('input', () => { $('noise-value').textContent = Numb
 $('probability').addEventListener('input', () => { $('probability-value').textContent = Number($('probability').value).toFixed(2); });
 $('probability').addEventListener('change', settings);
 $('view').addEventListener('change', () => {
-  $('channel-controls').hidden = $('view').value !== 'hidden';
-  $('view-help').hidden = $('view').value === 'hidden';
-  $('view-help').textContent = { rgba: 'Visible channels are premultiplied RGB and alpha. Display clipping leaves internal states unchanged.', alpha: 'Alpha is shown on a fixed scale from 0 (dark) to 1 (lime). Living masks use the documented 0.1 threshold.', delta: 'Root-mean-square magnitude of the most recent local update. Fixed display scale 0–0.05.' }[$('view').value] || '';
+  viewHelp();
   settings();
 });
 $('channel').addEventListener('input', () => { $('channel-value').textContent = $('channel').value; });
@@ -395,11 +463,11 @@ $('file-input').addEventListener('change', async () => {
     $('second-model-select').value = state.secondModel;
     $('probability').value = result.probability; $('probability-value').textContent = Number(result.probability).toFixed(2);
     $('view').value = result.view; $('channel').value = result.channel; $('channel-value').textContent = result.channel;
-    $('channel-controls').hidden = result.view !== 'hidden'; $('view-help').hidden = result.view === 'hidden';
+    viewHelp();
     state.paired = result.mode === 'paired';
     if (result.mode === 'compare') setMode('compare', { preserve: true });
     else setMode(state.paired ? 'inspect' : 'grow', { preserve: true });
-    update(result); notice('Imported successfully. The simulation is paused.');
+    update(result); $('last-action').textContent = `Experiment imported at step ${result.step}.`; notice('Imported successfully. The simulation is paused.');
   }
 });
 async function runDiagnostic(kind) {
@@ -413,7 +481,7 @@ async function runDiagnostic(kind) {
     state[kind] = result[kind];
     $('diagnostic-result').textContent = JSON.stringify(result[kind], null, 2);
     $('export-diagnostics').disabled = false;
-  } finally { button.disabled = false; }
+  } finally { button.disabled = !state.ready; }
 }
 $('run-parity').addEventListener('click', () => runDiagnostic('parity'));
 $('run-benchmark').addEventListener('click', () => runDiagnostic('benchmark'));
@@ -422,13 +490,19 @@ $('retry').addEventListener('click', boot);
 $('recreate-worker').addEventListener('click', boot);
 document.addEventListener('visibilitychange', () => { if (document.hidden) setPlaying(false); });
 window.addEventListener('pagehide', () => state.client?.terminate());
-window.addEventListener('hashchange', () => setMode(location.hash.slice(1)));
-new ResizeObserver(() => { if (state.last) drawChart(state.last.curves || []); }).observe($('error-chart').parentElement);
+window.addEventListener('hashchange', () => { const mode = location.hash.slice(1); if (Object.hasOwn(modes, mode)) setMode(mode); });
+const chartResize = new ResizeObserver(() => {
+  if (!state.last) return;
+  drawChart(state.last.curves || []);
+  if (state.paired) drawChart((state.last.curves || []).map((point) => ({ step: point.step, errors: [point.divergence?.visible, point.divergence?.hidden] })), 'divergence-chart');
+});
+chartResize.observe($('error-chart').parentElement);
+chartResize.observe($('divergence-chart').parentElement);
 for (const button of document.querySelectorAll('[data-close]')) button.addEventListener('click', () => $(button.dataset.close).close());
 for (const dialog of document.querySelectorAll('dialog')) dialog.addEventListener('click', (event) => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
-$('about-open').addEventListener('click', () => $('about-dialog').showModal());
+$('about-open').addEventListener('click', () => { setPlaying(false); $('about-dialog').showModal(); });
 $('results-open').addEventListener('click', async () => {
-  $('results-dialog').showModal();
+  setPlaying(false); $('results-dialog').showModal();
   const holder = $('results-content'); holder.textContent = 'Loading recorded results…';
   try {
     const response = await fetch(new URL('./reports/summary.json', import.meta.url));
@@ -436,47 +510,6 @@ $('results-open').addEventListener('click', async () => {
     const report = await response.json(); renderResults(report, holder);
   } catch (error) { holder.textContent = error.message; }
 });
-function renderResults(report, holder) {
-  holder.replaceChildren();
-  const intro = document.createElement('p'); intro.textContent = report.description || report.note || `Evaluation schema ${report.schema_version || report.schemaVersion || '1'}. All published values come from saved native trials.`; holder.append(intro);
-  const items = Array.isArray(report.models) ? report.models : report.models ? Object.entries(report.models).map(([id, model]) => ({ id, ...model })) : Array.isArray(report.results) ? report.results : [];
-  if (!items.length) {
-    const pre = document.createElement('pre'); pre.textContent = JSON.stringify(report, null, 2); pre.style.cssText = 'white-space:pre-wrap;font-size:10px;overflow-wrap:anywhere'; holder.append(pre); return;
-  }
-  const wrap = document.createElement('div'); wrap.className = 'results-table-wrap';
-  const table = document.createElement('table');
-  const head = document.createElement('thead'); const row = document.createElement('tr');
-  for (const label of ['Model', 'Growth', 'Persistence', 'Repair']) { const cell = document.createElement('th'); cell.textContent = label; row.append(cell); }
-  head.append(row); table.append(head);
-  const body = document.createElement('tbody');
-  const summarize = (value) => {
-    if (typeof value === 'number') return fmt(value, 3);
-    if (!value) return 'Not reported';
-    if (value.successes !== undefined && value.trials !== undefined) return `${value.successes}/${value.trials} successful`;
-    if (value.success_rate !== undefined) return `${(value.success_rate * 100).toFixed(1)}% success`;
-    if (value.failures !== undefined) return `${value.failures} failures / ${value.trials ?? value.n ?? '—'} trials`;
-    return Object.entries(value).filter(([, v]) => typeof v === 'number').slice(0, 2).map(([k, v]) => `${k.replaceAll('_', ' ')}: ${fmt(v, 3)}`).join('; ') || 'See raw report';
-  };
-  for (const item of items) {
-    const row = document.createElement('tr');
-    for (const value of [item.name || item.id || item.model_id, summarize(item.growth), summarize(item.persistence), summarize(item.repair)]) { const cell = document.createElement('td'); cell.textContent = value || '—'; row.append(cell); }
-    body.append(row);
-  }
-  table.append(body); wrap.append(table); holder.append(wrap);
-  for (const item of items) {
-    const details = document.createElement('details'); details.className = 'result-card'; const summary = document.createElement('summary'); summary.textContent = `${item.name || item.id || item.model_id} · full aggregate`;
-    const pre = document.createElement('pre'); pre.textContent = JSON.stringify(item, null, 2); details.append(summary, pre);
-    const links = document.createElement('p');
-    for (const [field, label] of [['report_json', 'All trials · JSON'], ['report_csv', 'All trials · CSV'], ['plot', 'Recorded curves']]) {
-      if (typeof item[field] !== 'string') continue;
-      const path = item[field].startsWith('reports/') ? item[field] : `reports/${item[field]}`;
-      if (!/^reports\/[a-zA-Z0-9_./-]+$/.test(path) || path.includes('..')) continue;
-      const link = document.createElement('a'); link.href = new URL(path, import.meta.url); link.textContent = label; link.style.marginRight = '16px'; links.append(link);
-    }
-    details.append(links); holder.append(details);
-  }
-  if (report.limitations) { const note = document.createElement('p'); note.className = 'results-warning'; note.textContent = Array.isArray(report.limitations) ? report.limitations.join(' ') : report.limitations; holder.append(note); }
-}
 // Read-only diagnostics for repeatable browser verification, never an alternate simulator.
 Object.defineProperty(window, 'mycelium', { value: Object.freeze({ get ready() { return state.ready; }, get snapshot() { return state.last; }, get diagnostics() { return { parity: state.parity, benchmark: state.benchmark }; }, get transport() { return { busy: state.client?.busy, generation: state.client?.generation, queued: state.client?.queue.length }; } }) });
 setMode(location.hash.slice(1) || 'grow');

@@ -60,9 +60,13 @@ async function main() {
   await rm(temporary, { recursive: true, force: true });
   await mkdir(join(temporary, 'runtime'), { recursive: true });
   await mkdir(join(temporary, 'targets'), { recursive: true });
-  for (const file of ['index.html', 'style.css', 'app.js', 'runtime-client.js', 'worker.js', 'icon.svg']) await cp(join(root, 'web', file), join(temporary, file));
+  for (const file of ['index.html', 'style.css', 'app.js', 'results-view.js', 'runtime-client.js', 'worker.js', 'icon.svg']) await cp(join(root, 'web', file), join(temporary, file));
   // Pages caches static assets. Give changed entrypoints distinct URLs so a
   // fresh document cannot reuse an older interface script or stylesheet.
+  // Version the presentation module as well as the entrypoint that imports it.
+  const resultsVersion = digest(await readFile(join(temporary, 'results-view.js'))).slice(0, 16);
+  const app = await readFile(join(temporary, 'app.js'), 'utf8');
+  await writeFile(join(temporary, 'app.js'), app.replace('./results-view.js', `./results-view.js?v=${resultsVersion}`));
   let html = await readFile(join(temporary, 'index.html'), 'utf8');
   for (const file of ['app.js', 'style.css']) {
     const version = digest(await readFile(join(temporary, file))).slice(0, 16);

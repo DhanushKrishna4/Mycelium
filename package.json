@@ -6,6 +6,7 @@
   "description": "A local neural cellular automata laboratory, with Python in the browser",
   "scripts": {
     "runtime": "node scripts/acquire-runtime.mjs",
+    "og": "OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 .venv/bin/python tools/og/render.py",
     "build": "node scripts/build.mjs",
     "serve": "python3 -m http.server 8080 --directory dist",
     "check:web": "node --check web/app.js && node --check web/results-view.js && node --check web/worker.js && node --check web/runtime-client.js && node --test web/runtime-client.test.mjs"

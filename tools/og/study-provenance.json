@@ -1,0 +1,37 @@
+{
+  "model": "models/ring-regeneration.json",
+  "weights_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+  "seed": 123,
+  "probability": 0.5,
+  "numpy": "2.0.2",
+  "pillow": "11.1.0",
+  "event": {
+    "type": "erase",
+    "shape": "rectangle",
+    "x": 16,
+    "y": 0,
+    "width": 16,
+    "height": 32,
+    "step": 256
+  },
+  "states": {
+    "grown": {
+      "step": 256,
+      "state_sha256": "1988bc4db7d0711b2e7a89176b2930d217d0596d50d88abc1278927afdf77619",
+      "rgba_sha256": "72543ed3fbfd11bd4939f24e1baa20d80f2fb9bddcc68199cb283f29b7c53e9b",
+      "occupied_cells": 352
+    },
+    "cut": {
+      "step": 256,
+      "state_sha256": "f3120cd3024b310c46d6b74d2f4306f56af577339bff6521523e01cb921095ce",
+      "rgba_sha256": "a1b14c52362e0cdc28e6a2df61e3d0b56058e3efdd20540feee8ea37eccbe218",
+      "occupied_cells": 168
+    },
+    "repaired": {
+      "step": 512,
+      "state_sha256": "1d953097b7d73f22af6ad64e2de701683891ab294b11388bf9bb3ffb6ea32108",
+      "rgba_sha256": "47604cac9d25eb84671a0883a800c49258ffad2567099ababa79f58ef911dcc3",
+      "occupied_cells": 321
+    }
+  }
+}

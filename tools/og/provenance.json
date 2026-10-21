@@ -1,0 +1,80 @@
+{
+  "model": "models/ring-regeneration.json",
+  "weights_hash": "9d3c08daed99fa5d77c8aac648b4a95659a9a24b58c91762ea2f199a947d7f21",
+  "seed": 123,
+  "probability": 0.5,
+  "numpy": "2.0.2",
+  "pillow": "11.1.0",
+  "event": {
+    "type": "erase",
+    "shape": "rectangle",
+    "x": 16,
+    "y": 0,
+    "width": 16,
+    "height": 32,
+    "step": 256
+  },
+  "states": {
+    "grown": {
+      "step": 256,
+      "state_sha256": "1988bc4db7d0711b2e7a89176b2930d217d0596d50d88abc1278927afdf77619",
+      "rgba_sha256": "72543ed3fbfd11bd4939f24e1baa20d80f2fb9bddcc68199cb283f29b7c53e9b",
+      "occupied_cells": 352
+    },
+    "cut": {
+      "step": 256,
+      "state_sha256": "f3120cd3024b310c46d6b74d2f4306f56af577339bff6521523e01cb921095ce",
+      "rgba_sha256": "a1b14c52362e0cdc28e6a2df61e3d0b56058e3efdd20540feee8ea37eccbe218",
+      "occupied_cells": 168
+    },
+    "repaired": {
+      "step": 512,
+      "state_sha256": "1d953097b7d73f22af6ad64e2de701683891ab294b11388bf9bb3ffb6ea32108",
+      "rgba_sha256": "47604cac9d25eb84671a0883a800c49258ffad2567099ababa79f58ef911dcc3",
+      "occupied_cells": 321
+    }
+  },
+  "output": {
+    "file": "web/og-v1.png",
+    "size": [
+      1200,
+      630
+    ],
+    "bytes": 81174,
+    "sha256": "eccd382c03c30687f231d641ae9815657b4bc3a720608b5b2468d91001acaa3d",
+    "mode": "RGB",
+    "color_space": "sRGB (rendering intent 0)"
+  },
+  "fonts": {
+    "serif": {
+      "family": "Georgia",
+      "style": "Regular",
+      "face_index": 0,
+      "file_sha256": "4f54eb299fccea7f103edeb0d92437359bfd4441811d53222b82b335369f6218"
+    },
+    "italic": {
+      "family": "Georgia",
+      "style": "Italic",
+      "face_index": 0,
+      "file_sha256": "7758840cacb7382db65aa038e9fd1194d077ba9b55fe748f9cfb196d2773ac4e"
+    },
+    "sans": {
+      "family": "Avenir Next",
+      "style": "Regular",
+      "face_index": 7,
+      "file_sha256": "e03834eefdb4164c2af2c35b985285eb4fd67ff8db54aaed3bdc6d9c8b7f3c3c"
+    },
+    "medium": {
+      "family": "Avenir Next",
+      "style": "Medium",
+      "face_index": 5,
+      "file_sha256": "e03834eefdb4164c2af2c35b985285eb4fd67ff8db54aaed3bdc6d9c8b7f3c3c"
+    },
+    "mono": {
+      "family": "Menlo",
+      "style": "Regular",
+      "face_index": 0,
+      "file_sha256": "f2d400484a6aace67980730ec0a9ef24ce9e535a2604f118e6fdc2510021b85f"
+    }
+  }
+}
